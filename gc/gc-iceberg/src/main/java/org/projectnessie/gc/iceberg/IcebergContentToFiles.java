@@ -63,6 +63,8 @@ public abstract class IcebergContentToFiles implements ContentToFiles {
       "org.apache.iceberg.exceptions.NotFoundException";
   static final String S3_KEY_NOT_FOUND_EXCEPTION =
       "software.amazon.awssdk.services.s3.model.NoSuchKeyException";
+  static final String S3_BUCKET_NOT_FOUND_EXCEPTION =
+      "software.amazon.awssdk.services.s3.model.NoSuchBucketException";
   static final String GCS_STORAGE_EXCEPTION = "com.google.cloud.storage.StorageException";
   static final String ADLS_BLOB_STORAGE_EXCEPTION =
       "com.azure.storage.blob.models.BlobStorageException";
@@ -206,7 +208,7 @@ public abstract class IcebergContentToFiles implements ContentToFiles {
     boolean notFound = false;
     for (Throwable c = notFoundCandidate; c != null; c = c.getCause()) {
       switch (c.getClass().getName()) {
-        case ICEBERG_NOT_FOUND_EXCEPTION, S3_KEY_NOT_FOUND_EXCEPTION -> notFound = true;
+        case ICEBERG_NOT_FOUND_EXCEPTION, S3_KEY_NOT_FOUND_EXCEPTION, S3_BUCKET_NOT_FOUND_EXCEPTION -> notFound = true;
         case GCS_STORAGE_EXCEPTION -> {
           if (c.getMessage().startsWith(GCS_NOT_FOUND_START)) {
             notFound = true;
